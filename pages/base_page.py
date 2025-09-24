@@ -1,5 +1,5 @@
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class BasePage:
@@ -7,35 +7,21 @@ class BasePage:
         self.driver = driver
         self.base_url = "https://stellarburgers.nomoreparties.site"
 
-    def find_element(self, locator, time=10):
-        return WebDriverWait(self.driver, time).until(
-            EC.presence_of_element_located(locator),
-            message=f"Can't find element by locator {locator}"
-        )
+    def open(self, path=""):
 
-    def find_elements(self, locator, time=10):
-        return WebDriverWait(self.driver, time).until(
-            EC.presence_of_all_elements_located(locator),
-            message=f"Can't find elements by locator {locator}"
-        )
+        url = f"{self.base_url}{path}"
+        self.driver.get(url)
 
-    def go_to_site(self):
-        return self.driver.get(self.base_url)
+    def get_current_url(self):
 
-    def click_element(self, locator):
-        element = self.find_element(locator)
-        element.click()
+        return self.driver.current_url
 
-    def input_text(self, locator, text):
-        element = self.find_element(locator)
-        element.clear()
-        element.send_keys(text)
+    def wait_for_url_to_be(self, expected_url, timeout=10):
 
-    def get_text(self, locator):
-        element = self.find_element(locator)
-        return element.text
+        WebDriverWait(self.driver, timeout).until(EC.url_to_be(expected_url))
+        return self.get_current_url()
 
-    def wait_for_url(self, url, timeout=10):
-        return WebDriverWait(self.driver, timeout).until(
-            EC.url_to_be(url)
-        )
+    def wait_for_url_to_contain(self, text, timeout=10):
+
+        WebDriverWait(self.driver, timeout).until(EC.url_contains(text))
+        return self.get_current_url()

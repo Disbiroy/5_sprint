@@ -1,11 +1,13 @@
 from .base_page import BasePage
-from locators.locators import ForgotPasswordPageLocators
-from selenium.webdriver.common.by import By
 
 
 class ForgotPasswordPage(BasePage):
-    def click_login_link(self):
-        self.click_element((By.XPATH, ForgotPasswordPageLocators.LOGIN_LINK))
+    def __init__(self, driver):
+        super().__init__(driver)
 
-    def is_forgot_password_page(self):
-        return self.find_element((By.XPATH, ForgotPasswordPageLocators.FORGOT_PASSWORD_TITLE)).is_displayed()
+    def is_forgot_password_page_opened(self):
+        self.wait_for_url_to_contain("/forgot-password")
+        return "/forgot-password" in self.get_current_url()
+
+    def click_login_link(self):
+        pass
