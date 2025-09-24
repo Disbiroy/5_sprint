@@ -8,9 +8,9 @@ from utils.generators import generate_email, generate_password, generate_name
 
 class TestLogin:
     def test_login_from_main_page(self, driver):
-        driver.get("https://stellarburgers.nomoreparties.site")
-
         main_page = MainPage(driver)
+        main_page.open()
+
         main_page.click_login_button()
 
         login_page = LoginPage(driver)
@@ -24,21 +24,22 @@ class TestLogin:
 
         login_page.login(email, password)
 
-        assert driver.current_url == "https://stellarburgers.nomoreparties.site/"
+        main_page_after_login = MainPage(driver)
+        assert main_page_after_login.is_main_page_opened()
 
     def test_login_from_personal_account(self, driver):
-        driver.get("https://stellarburgers.nomoreparties.site")
-
         main_page = MainPage(driver)
+        main_page.open()
+
         main_page.click_personal_account_button()
 
         login_page = LoginPage(driver)
-        assert login_page.is_login_page()
+        assert login_page.is_login_page_opened()
 
     def test_login_from_registration_page(self, driver):
-        driver.get("https://stellarburgers.nomoreparties.site")
-
         main_page = MainPage(driver)
+        main_page.open()
+
         main_page.click_login_button()
 
         login_page = LoginPage(driver)
@@ -47,20 +48,20 @@ class TestLogin:
         registration_page = RegistrationPage(driver)
         registration_page.click_login_link()
 
-        assert login_page.is_login_page()
+        assert login_page.is_login_page_opened()
 
     def test_login_from_forgot_password_page(self, driver):
-        driver.get("https://stellarburgers.nomoreparties.site")
-
         main_page = MainPage(driver)
+        main_page.open()
+
         main_page.click_login_button()
 
         login_page = LoginPage(driver)
         login_page.click_forgot_password_link()
 
         forgot_password_page = ForgotPasswordPage(driver)
-        assert forgot_password_page.is_forgot_password_page()
+        assert forgot_password_page.is_forgot_password_page_opened()
 
         forgot_password_page.click_login_link()
 
-        assert login_page.is_login_page()
+        assert login_page.is_login_page_opened()
